@@ -117,4 +117,4 @@ Copyright 2012 Hatena <http://www.hatena.com/>.
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
-=back
+=cut
