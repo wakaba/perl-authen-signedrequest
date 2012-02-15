@@ -66,6 +66,8 @@ The package variable C<$Authen::SignedRequest::Warn> controls whether
 reason of signature verification errors should be warned or not,
 defaulted false.
 
+=back
+
 =head1 DEPENDENCY
 
 =over 4
