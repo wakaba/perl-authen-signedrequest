@@ -1,6 +1,7 @@
 package Authen::SignedRequest;
 use strict;
 use warnings;
+our $VERSION = '1.0';
 use Carp qw(carp croak);
 use Digest::SHA qw(hmac_sha256);
 use MIME::Base64::URLSafe;
