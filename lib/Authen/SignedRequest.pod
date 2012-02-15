@@ -1,0 +1,120 @@
+=head1 NAME
+
+Authen::SignedRequest - Generation and verification of signed_request
+
+=head1 SYNOPSIS
+
+  use Authen::SignedRequest;
+  
+  my $data = {key => $value, ...};
+  my $signed = Authen::SignedRequest->get_signed_request
+      ({key => $value, ...}, $secret);
+  
+  my $data = Authen::SignedRequest->verify_request
+      ($signed, $secret); # or undef if bad signature
+
+=head1 DESCRIPTION
+
+The C<Authen::SignedRequest> module provides two functions to generate
+or verify signature in the C<signed_request> format.
+
+=head1 METHODS
+
+=over 4
+
+=item $signed = Authen::SignedRequest->get_signed_request($data, $secret)
+
+Generate a C<signed_request> for the given data.
+
+The first argument must be the signed data, as a hash reference.  The
+method would modify the hash reference, if required, to append
+additional information such as hash algorithm.  Since the
+C<signed_request> use JSON serialization, the data must be
+serializable.  The method use L<JSON::XS> as the serializer.
+
+The second argument must be the secret key for the signature.  It must
+be a byte string.
+
+The method return the C<signed_request>.  It is signed by the
+HMAC-SHA256 algorithm (as stated by the C<algorithm> value in the
+signed JSON data) with the current timestamp (in the C<issued_at>
+value in the signed JSON data).
+
+=item $data = Authen::SignedRequest->verify_request($signed, $secret)
+
+Verify a C<signed_request> and return the extracted data.
+
+The first argument must be the C<signed_request> byte string.
+
+The second argument must be the secret key for the signature.  It must
+be a byte string.
+
+If the C<signed_request> is a JSON data with a valid signature and is
+not timeouted yet, the JSON data, deserialized into Perl values, is
+returned by the method.  Otherwise, i.e. the data is not correctly
+signed, the hash algorithm in use is unknown, the JSON data is broken,
+the signed data is timeouted, or otherwise broken, C<undef> is
+returned.
+
+The package variable C<$Authen::SignedRequest::SignatureTimeout>
+represents the seconds of the timeout.  It is 180 seconds by default.
+If the C<signed_request> has no timestamp (C<issued_at>), the signed
+data is treated as timeouted.  You can disable timeout verification by
+setting a false value to the variable.
+ 
+The package variable C<$Authen::SignedRequest::Warn> controls whether
+reason of signature verification errors should be warned or not,
+defaulted false.
+
+=back
+
+=head1 DEPENDENCY
+
+=over 4
+
+=item L<Digest::SHA>.
+
+=item L<MIME::Base64::URLSafe>.
+
+=item L<JSON::Functions::XS>, which depends on L<JSON::XS>.
+
+Available from <https://github.com/wakaba/perl-json-functions-xs/>.
+
+=back
+
+=head1 SEE ALSO
+
+Signed Request
+<https://developers.facebook.com/docs/authentication/signed_request/>.
+
+=head1 DISTRIBUTION
+
+Latest version of this module is available from
+<https://github.com/wakaba/perl-authen-signedrequest/>.
+
+=head1 HISTORY
+
+=over 4
+
+=item 2012-02-15
+
+New module.
+
+=back
+
+=head1 AUTHOR
+
+Wakaba <wakabatan@hatena.ne.jp>.
+
+=head1 ACKNOWLEDGEMENTS
+
+This module is a product of Hatena platform development group.
+
+=head1 LICENSE
+
+Copyright 2012 Hatena <http://www.hatena.com/>.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
