@@ -11,6 +11,8 @@ my ($signed, $key) = @ARGV;
 $signed =~ s/^signed_request=//;
 
 $Authen::SignedRequest::Warn = 1;
+$Authen::SignedRequest::SignatureTimeout = 0 if $ENV{IGNORE_TIMEOUT};
+
 my $data = Authen::SignedRequest->verify_signed_request($signed, $key);
 
 print "Valid: " . ($data ? 'Yes' : 'No') . "\n";
