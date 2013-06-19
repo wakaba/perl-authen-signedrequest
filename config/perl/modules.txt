@@ -1,0 +1,6 @@
+Carp
+Data::Dumper
+Digest::SHA
+MIME::Base64::URLSafe
+Path::Class
+Test::Class
